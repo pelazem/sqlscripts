@@ -1,7 +1,3 @@
-# PLEASE NOTE DISCLAIMERS IN MAIN REPO README at https://bitbucket.org/pelazem/public
-
----
-
 ## Summary
 These files implement a complete demonstration of the following SQL Server 2016 security features:
 
