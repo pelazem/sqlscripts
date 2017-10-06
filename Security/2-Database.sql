@@ -8,11 +8,11 @@ WINDOWS/AD GROUPS AND USERS
 ---------------------------
 This script assumes the following Windows/AD users and groups exist. They do NOT need to be mapped to SQL Server logins; this script handles that for the database.
 
-Group: WinOpsPersons
-Members: WinOpsPerson1, WinOpsPerson2
+Group: Test_WinOpsPeople
+Members: Test_WinOpsPerson1, Test_WinOpsPerson2
 
-Group: WinOpsMgrs
-Members: WinOpsMgr1
+Group: Test_WinOpsMgrs
+Members: Test_WinOpsMgr1
 ---------------------------
 ---------------------------
 
@@ -26,19 +26,24 @@ Members: WinOpsMgr1
 USE [master];
 GO
 
+sp_configure 'contained database authentication', 1;  
+GO  
+RECONFIGURE;  
+GO
+
 drop database if exists [TestDb];
 go
 
 CREATE DATABASE [TestDb]
 	CONTAINMENT = NONE
 	ON PRIMARY 
-( NAME = N'TestDb', FILENAME = N'E:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\TestDb.mdf', SIZE = 64MB , MAXSIZE = UNLIMITED, FILEGROWTH = 64MB )
+( NAME = N'TestDb', FILENAME = N'G:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\TestDb.mdf', SIZE = 128MB , MAXSIZE = UNLIMITED, FILEGROWTH = 128MB )
  LOG ON 
-( NAME = N'TestDb_log', FILENAME = N'E:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\TestDb_log.ldf', SIZE = 32MB , MAXSIZE = 2048GB , FILEGROWTH = 32MB )
+( NAME = N'TestDb_log', FILENAME = N'H:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\TestDb_log.ldf', SIZE = 64MB , MAXSIZE = 2048GB , FILEGROWTH = 64MB )
 ;
 GO
 
-ALTER DATABASE [TestDb] SET COMPATIBILITY_LEVEL = 130
+ALTER DATABASE [TestDb] SET COMPATIBILITY_LEVEL = 140
 GO
 
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
@@ -91,22 +96,22 @@ go
 -- BEGIN USERS
 
 
-create user [WinOpsMgrs] for login [PZVMW16SQL16\WinOpsMgrs];
-create user [WinOpsPersons] for login [PZVMW16SQL16\WinOpsPersons];
+create user [Test_WinOpsMgrs] for login [NETGAIN\Test_WinOpsMgrs];
+create user [Test_WinOpsPeople] for login [NETGAIN\Test_WinOpsPeople];
 go
 
-alter role [OpsPersonRole] add member [WinOpsMgrs];
-alter role [OpsPersonRole] add member [WinOpsPersons];
+alter role [OpsPersonRole] add member [Test_WinOpsMgrs];
+alter role [OpsPersonRole] add member [Test_WinOpsPeople];
 go
 
-alter role [OpsMgrRole] add member [WinOpsMgrs];
+alter role [OpsMgrRole] add member [Test_WinOpsMgrs];
 go
 
 
-create user SqlSupportMgr1 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSupportPerson1 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSupportPerson2 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSupportPerson3 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
+create user SqlSupportMgr1 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSupportPerson1 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSupportPerson2 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSupportPerson3 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
 go
 
 alter role [SupportMgrRole] add member [SqlSupportMgr1];
@@ -119,12 +124,12 @@ alter role [SupportPersonRole] add member [SqlSupportPerson3];
 go
 
 
-create user SqlSalesMgr1 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSalesPerson1 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSalesPerson2 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSalesPerson3 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSalesPerson4 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
-create user SqlSalesPerson5 with password = N'P@ssw0rd2016!', DEFAULT_SCHEMA=[data];
+create user SqlSalesMgr1 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSalesPerson1 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSalesPerson2 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSalesPerson3 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSalesPerson4 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
+create user SqlSalesPerson5 with password = N'P@ssw0rd2017!', DEFAULT_SCHEMA=[data];
 go
 
 alter role [SalesMgrRole] add member [SqlSalesMgr1];
