@@ -1,0 +1,34 @@
+<xsd:schema
+    targetNamespace="http://schemas.microsoft.com/pz17/TestDb/Type1"
+    xmlns="http://schemas.microsoft.com/pz17/TestDb/Type1"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+>
+    <xsd:complexType name="SymbolType" mixed="true">
+		<xsd:sequence>
+			<xsd:element name="Ticker" type="xsd:string" />
+			<xsd:element name="Exchange" type="xsd:string" />
+			<xsd:element name="Qty" type="xsd:decimal" />
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Transaction">
+		<xsd:complexType mixed="true">
+			<xsd:sequence>
+				<xsd:element name="TransactionGuid" type="xsd:string" />
+				<xsd:element name="Amount" type="xsd:decimal" />
+				<xsd:element name="Settled" type="xsd:boolean" />
+				<xsd:element name="TransactionDate" type="xsd:dateTime" />
+				<xsd:element name="Note" type="xsd:string" />
+				<xsd:element name="Symbols">
+					<xsd:complexType mixed="true">
+						<xsd:sequence>
+							<xsd:element name="Symbol" type="SymbolType" minOccurs="1" maxOccurs="20" />
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+    </xsd:element>
+</xsd:schema>

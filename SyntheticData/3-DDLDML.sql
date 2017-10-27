@@ -105,7 +105,8 @@ create table [data].[XmlBlobs]
 	'<Settled>' + convert(nvarchar(10), Settled) + '</Settled>' +
 	case when TransactionDate is not null then '<TransactionDate>' + convert(nvarchar(20), TransactionDate) + '</TransactionDate>' else '' end +
 	case when Note is not null then '<Note>' + Note + '</Note>' else '' end +
-'</xml>'
+'</xml>',
+	[XmlRaw] [xml] null
 )
 ON [PRIMARY];
 go
