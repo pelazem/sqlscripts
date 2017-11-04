@@ -22,8 +22,7 @@ fetch next from TableCursor into @TableName;
 
 while @@FETCH_STATUS = 0
 begin
-	--select	@TableSql = 'truncate table ' + @TableName + ';';
-	select	@TableSql = 'delete from ' + @TableName + ';';
+	select	@TableSql = 'select TableName = ''' + @TableName + ''', NumRows = count(*) from ' + @TableName + ';';
 
 	exec sp_sqlexec @TableSql;
 
