@@ -1,5 +1,11 @@
 set nocount off;
 
+create table #counts
+(
+	TableName varchar(250) null,
+	NumRows int null
+);
+
 declare	@TableName varchar(250),
 		@TableSql varchar(300);
 
@@ -22,7 +28,7 @@ fetch next from TableCursor into @TableName;
 
 while @@FETCH_STATUS = 0
 begin
-	select	@TableSql = 'select TableName = ''' + @TableName + ''', NumRows = count(*) from ' + @TableName + ';';
+	select	@TableSql = 'insert into #counts(TableName, NumRows) select TableName = ''' + @TableName + ''', NumRows = count(*) from ' + @TableName + ';';
 
 	exec sp_sqlexec @TableSql;
 
@@ -31,4 +37,9 @@ end
 
 close TableCursor;
 deallocate TableCursor;
+
+select * from #counts;
+
+drop table #counts;
+
 go
