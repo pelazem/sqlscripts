@@ -1,6 +1,3 @@
--- Given a column NUMBER in a table, returns the column NAME
--- Note that column NUMBER is 1-based
-
 create function [data].[GetColumnNameForColumnNumber]
 (
 	@SchemaName		varchar(50),
@@ -12,16 +9,25 @@ as
 begin
 	declare	@result varchar(50);
 
+	with ColCTE as
+	(
+		select
+			c.name as ColumnName,
+			ROW_NUMBER() over (order by c.column_id) as ColumnNumber
+		from
+			sys.tables t
+			inner join sys.schemas s on t.schema_id = s.schema_id
+			inner join sys.columns c on t.object_id = c.object_id
+		where
+			s.name = @SchemaName and
+			t.name = @TableName
+	)
 	select
-		@result = c.name
+		@result = ColumnName
 	from
-		sys.tables t
-		inner join sys.schemas s on t.schema_id = s.schema_id
-		inner join sys.columns c on t.object_id = c.object_id
+		ColCTE
 	where
-		s.name = @SchemaName and
-		t.name = @TableName and
-		c.column_id = @ColumnNumber
+		ColumnNumber = @ColumnNumber
 	;
 
 	return	@result;
